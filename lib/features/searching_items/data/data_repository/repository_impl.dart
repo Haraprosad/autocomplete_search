@@ -4,18 +4,14 @@ import 'package:autocomplete_search/features/searching_items/data/model/item_mod
 import 'package:dio/dio.dart';
 
 class UserApi {
-  static Future<List<Item>> getUserSuggestions(String query) async {
+  static Future<List<ItemsModel>> getUserSuggestions(String query) async {
     Dio _dio = Dio();
     const url = 'https://jsonplaceholder.typicode.com/users';
-    final response = await _dio.get(url);
-
+    final response = await _dio.get(url,options: Options(
+      responseType: ResponseType.plain, //for getting respose as string
+    ),);
     if (response.statusCode == 200) {
-      final List users = response.data;
-      return users.map((json) => Item.fromJson(json)).where((user) {
-        final nameLower = user.name.toLowerCase();
-        final queryLower = query.toLowerCase();
-        return nameLower.contains(queryLower);
-      }).toList();
+      return itemsModelFromJson(response.data);
     } else {
       throw Exception();
     }

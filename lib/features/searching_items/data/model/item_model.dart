@@ -1,31 +1,14 @@
 import 'dart:convert';
 
-class Item {
-  final String name;
-
-  const Item({
-    required this.name,
+List<ItemsModel> itemsModelFromJson(String str) => List<ItemsModel>.from(json.decode(str).map((x) => ItemsModel.fromJson(x)));
+class ItemsModel {
+  ItemsModel({
+    this.name,
   });
 
-  // static Item fromJson(Map<String, dynamic> json) => Item(
-  //   name: json['name'],
-  // );
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
-    name: json["name"],
+  String? name;
+
+  factory ItemsModel.fromJson(Map<String, dynamic> json) => ItemsModel(
+    name: json["name"]??"name",
   );
 }
-
-// List<ItemModel> itemModelFromJson(String str) => List<ItemModel>.from(json.decode(str).map((x) => ItemModel.fromJson(x)));
-//
-// class ItemModel {
-//   ItemModel({
-//     this.name,
-//   });
-//
-//   String? name;
-//
-//
-//   factory ItemModel.fromJson(Map<String, dynamic> json) => ItemModel(
-//     name: json["name"],
-//   );
-// }

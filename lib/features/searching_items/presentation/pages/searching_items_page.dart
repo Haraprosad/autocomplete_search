@@ -11,6 +11,12 @@ class SearchingItemsPage extends StatefulWidget {
 }
 
 class _SearchingItemsPageState extends State<SearchingItemsPage> {
+  final _textEditingController = TextEditingController();
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,15 +25,16 @@ class _SearchingItemsPageState extends State<SearchingItemsPage> {
             padding: const EdgeInsets.all(16),
             child: TypeAheadFormField(
               hideSuggestionsOnKeyboardHide: false,
-              textFieldConfiguration: const TextFieldConfiguration(
-                decoration: InputDecoration(
+              textFieldConfiguration: TextFieldConfiguration(
+                controller: _textEditingController,
+                decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(),
                   hintText: 'Search Username',
                 ),
               ),
               noItemsFoundBuilder: (context) => const SizedBox(
-                height: 100,
+                height: 60,
                 child:  Center(
                   child: Text(
                     'No Users Found.',
@@ -35,14 +42,16 @@ class _SearchingItemsPageState extends State<SearchingItemsPage> {
                   ),
                 ),
               ),
-              itemBuilder: (context, Item? suggestion) {
+              itemBuilder: (context, ItemsModel? suggestion) {
                 final item = suggestion!;
                 return ListTile(
-                  title: Text(item.name),
+                  title: Text(item.name!),
                 );
               },
               minCharsForSuggestions: 3,
-              onSuggestionSelected: (suggestion) {  },
+              onSuggestionSelected: (ItemsModel suggestion) {
+                _textEditingController.text = suggestion.name!;
+              },
               suggestionsCallback: UserApi.getUserSuggestions,
             ),
           ),
